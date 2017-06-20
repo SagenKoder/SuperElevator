@@ -17,8 +17,8 @@ public class CornerElevatorEventListener implements Listener {
 	private static final int MAX_ELEVATION = 24;
 	private static final int MIN_ELEVATION = 3;
 
-	public boolean isElevator(Block block) {
-		if(block.getType().isTransparent()) return false;
+	public static boolean isElevator(Block block) {
+		if(block.getType().isTransparent() || !isSpaceAbove(block)) return false;
 
 		if(block.getRelative(BlockFace.NORTH).getType().equals(Material.IRON_BLOCK) &&
 				(block.getRelative(BlockFace.NORTH, 2).getType().equals(Material.REDSTONE_TORCH_ON))) return true;
@@ -32,7 +32,7 @@ public class CornerElevatorEventListener implements Listener {
 		return false;
 	}
 
-	public boolean isSpaceAbove(Block block) {
+	public static boolean isSpaceAbove(Block block) {
 		return (block.getRelative(BlockFace.UP).getType().isTransparent()) 
 				&& block.getRelative(BlockFace.UP, 2).getType().isTransparent();
 	}
@@ -44,11 +44,11 @@ public class CornerElevatorEventListener implements Listener {
 
 		if ((p.hasPermission("pzyko.action.ironelevator")) && (!p.isSneaking() && !p.isFlying())) {
 
-			if(!isElevator(block) || !isSpaceAbove(block)) return;
+			if(!isElevator(block)) return;
 
 			Block b = block.getRelative(BlockFace.DOWN, MIN_ELEVATION);
 			int i = MAX_ELEVATION;
-			while ((i > 0) && (!isElevator(b) || !isSpaceAbove(b))) {
+			while ((i > 0) && (!isElevator(b))) {
 				i--;
 				b = b.getRelative(BlockFace.DOWN);
 			}
@@ -66,7 +66,7 @@ public class CornerElevatorEventListener implements Listener {
 		Player p = e.getPlayer();
 		Block block = p.getLocation().getBlock().getRelative(BlockFace.DOWN);
 
-		if(!isElevator(block) || !isSpaceAbove(block)) return;
+		if(!isElevator(block)) return;
 
 		if ((p.hasPermission("pzyko.action.ironelevator")) && (e.getFrom().getY() < e.getTo().getY())
 				&& !p.isFlying()) {
@@ -75,7 +75,7 @@ public class CornerElevatorEventListener implements Listener {
 
 			int i = MAX_ELEVATION;
 
-			while ((i > 0) && (!isElevator(b) || !isSpaceAbove(b))) {
+			while ((i > 0) && (!isElevator(b))) {
 				i--;
 				b = b.getRelative(BlockFace.UP);
 			}
@@ -95,10 +95,10 @@ public class CornerElevatorEventListener implements Listener {
 		
 		boolean yes = false;
 
-		if (isElevator(block) && isSpaceAbove(block)) {
+		if (isElevator(block)) {
 			Block b = block.getRelative(BlockFace.UP, MIN_ELEVATION);
 			int i = MAX_ELEVATION;
-			while ((i > 0 && !yes) && (!isElevator(block) || !isSpaceAbove(block))) {
+			while ((i > 0 && !yes) && (!isElevator(block))) {
 				i--;
 				b = b.getRelative(BlockFace.UP);
 			}
@@ -108,7 +108,7 @@ public class CornerElevatorEventListener implements Listener {
 
 			b = block.getRelative(BlockFace.DOWN, MIN_ELEVATION);
 			i = MAX_ELEVATION;
-			while ((i > 0 && !yes) && (!isElevator(block) || !isSpaceAbove(block))) {
+			while ((i > 0 && !yes) && (!isElevator(block))) {
 				i--;
 				b = b.getRelative(BlockFace.DOWN);
 			}

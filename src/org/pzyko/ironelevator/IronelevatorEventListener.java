@@ -17,6 +17,12 @@ public class IronelevatorEventListener implements Listener {
 	private static final int MAX_ELEVATION = 24;
 	private static final int MIN_ELEVATION = 3;
 
+	public static boolean isElevator(Block block) {
+		return !((block.getType() != Material.IRON_BLOCK) 
+				|| (!block.getRelative(BlockFace.UP).getType().isTransparent())
+				|| (!block.getRelative(BlockFace.UP, 2).getType().isTransparent()));
+	}
+	
 	@EventHandler
 	public void downElevator(PlayerToggleSneakEvent e) {
 		Player p = e.getPlayer();
@@ -25,10 +31,7 @@ public class IronelevatorEventListener implements Listener {
 				&& (b.getType() == Material.IRON_BLOCK) && !p.isFlying()) {
 			b = b.getRelative(BlockFace.DOWN, MIN_ELEVATION);
 			int i = MAX_ELEVATION;
-			while ((i > 0)
-					&& ((b.getType() != Material.IRON_BLOCK) 
-							|| (!b.getRelative(BlockFace.UP).getType().isTransparent())
-							|| (!b.getRelative(BlockFace.UP, 2).getType().isTransparent()))) {
+			while ((i > 0) && !isElevator(b)) {
 				i--;
 				b = b.getRelative(BlockFace.DOWN);
 			}
@@ -44,14 +47,10 @@ public class IronelevatorEventListener implements Listener {
 	public void upElevator(PlayerMoveEvent e) {
 		Player p = e.getPlayer();
 		Block b = e.getTo().getBlock().getRelative(BlockFace.DOWN);
-		if ((p.hasPermission("pzyko.action.ironelevator")) && (e.getFrom().getY() < e.getTo().getY())
-				&& (b.getType() == Material.IRON_BLOCK) && !p.isFlying()) {
+		if ((p.hasPermission("pzyko.action.ironelevator")) && (e.getFrom().getY() < e.getTo().getY()) && isElevator(b) && !p.isFlying()) {
 			b = b.getRelative(BlockFace.UP, MIN_ELEVATION);
 			int i = MAX_ELEVATION;
-			while ((i > 0)
-					&& ((b.getType() != Material.IRON_BLOCK) 
-							|| (!b.getRelative(BlockFace.UP).getType().isTransparent())
-							|| (!b.getRelative(BlockFace.UP, 2).getType().isTransparent()))) {
+			while ((i > 0) && !isElevator(b)) {
 				i--;
 				b = b.getRelative(BlockFace.UP);
 			}
@@ -74,10 +73,7 @@ public class IronelevatorEventListener implements Listener {
 		if (block.getType() == Material.IRON_BLOCK) {
 			Block b = block.getRelative(BlockFace.UP, MIN_ELEVATION);
 			int i = MAX_ELEVATION;
-			while ((i > 0 && !isOtherElevator)
-					&& ((b.getType() != Material.IRON_BLOCK) 
-							|| (!b.getRelative(BlockFace.UP).getType().isTransparent())
-							|| (!b.getRelative(BlockFace.UP, 2).getType().isTransparent()))) {
+			while ((i > 0) && !isOtherElevator && !isElevator(b)) {
 				i--;
 				b = b.getRelative(BlockFace.UP);
 			}
@@ -87,10 +83,7 @@ public class IronelevatorEventListener implements Listener {
 
 			b = block.getRelative(BlockFace.DOWN, MIN_ELEVATION);
 			i = MAX_ELEVATION;
-			while ((i > 0 && !isOtherElevator)
-					&& ((b.getType() != Material.IRON_BLOCK) 
-							|| (!b.getRelative(BlockFace.UP).getType().isTransparent())
-							|| (!b.getRelative(BlockFace.UP, 2).getType().isTransparent()))) {
+			while ((i > 0) && !isOtherElevator && !isElevator(b)) {
 				i--;
 				b = b.getRelative(BlockFace.DOWN);
 			}
@@ -100,8 +93,7 @@ public class IronelevatorEventListener implements Listener {
 		}
 
 
-		if(isOtherElevator && (block.getRelative(BlockFace.UP).getType().isTransparent()) 
-				&& block.getRelative(BlockFace.UP, 2).getType().isTransparent()) {
+		if(isOtherElevator) {
 			Location l = block.getLocation().add(0.5f, 0.5f, 0.5f);
 			
 			ActionHelper.playoutElevatorPlace(p, l);
