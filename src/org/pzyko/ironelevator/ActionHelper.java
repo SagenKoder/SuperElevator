@@ -23,12 +23,13 @@ public class ActionHelper {
 		p.setVelocity(new Vector(0, 0, 0));
 		p.setFlying(false);
 		p.getWorld().playSound(to, Sound.ENTITY_IRONGOLEM_ATTACK, 1.0F, 0.0F);
-		
+
 		try {
 			for(Player o : Bukkit.getOnlinePlayers()) {
 
+				if(o.getWorld() != p.getWorld()) continue;
 				if(o.getLocation().distance(p.getLocation()) > 50) continue;
-				
+
 				ParticleEffect.INSTANT_SPELL.sendToPlayer(o, to, 1, 2, 1, 1, 100);
 
 				Location location1 = p.getEyeLocation();
@@ -65,21 +66,27 @@ public class ActionHelper {
 		p.getWorld().playSound(l, Sound.BLOCK_END_PORTAL_FRAME_FILL, 1.0F, 0.0F);
 
 		try {
-			ParticleEffect.ANGRY_VILLAGER.sendToPlayer(p, l, 0, 0, 0, 0, 10);
+			for(Player o : Bukkit.getOnlinePlayers()) {
 
-			l.add(0, 3f, 0);
+				if(o.getWorld() != p.getWorld()) continue;
+				if(o.getLocation().distance(p.getLocation()) > 50) continue;
+				
+				ParticleEffect.ANGRY_VILLAGER.sendToPlayer(o, l, 0, 0, 0, 0, 10);
 
-			Location location = l;
-			int particles = 50;
-			float radius = 0.3f;
-			for (int par = 0; par < particles; par++) {
-				double angle, x, z;
-				angle = 2 * Math.PI * par / particles;
-				x = Math.cos(angle) * radius;
-				z = Math.sin(angle) * radius;
-				location.add(x, -1.6, z);
-				ParticleEffect.HAPPY_VILLAGER.sendToPlayer(p, location, 0, 0, 0, 0, 1);
-				location.subtract(x, -1.6, z);
+				l.add(0, 3f, 0);
+
+				Location location = l;
+				int particles = 50;
+				float radius = 0.3f;
+				for (int par = 0; par < particles; par++) {
+					double angle, x, z;
+					angle = 2 * Math.PI * par / particles;
+					x = Math.cos(angle) * radius;
+					z = Math.sin(angle) * radius;
+					location.add(x, -1.6, z);
+					ParticleEffect.HAPPY_VILLAGER.sendToPlayer(o, location, 0, 0, 0, 0, 1);
+					location.subtract(x, -1.6, z);
+				}
 			}
 		} catch (Exception e1) {
 			e1.printStackTrace();
