@@ -1,20 +1,27 @@
 package org.pzyko.ironelevator;
 
-import org.bukkit.plugin.java.JavaPlugin;
+import java.util.Optional;
 
-public class IronElevator extends JavaPlugin {
+import org.bukkit.Material;
+import org.bukkit.block.Block;
 
-	public static IronElevator ironelevator;
+public class IronElevator extends Elevator {
+
+	@Override
+	public String getElevatorName() {
+		return "Jern Heis";
+	}
 	
-	public void onEnable() {
-		//ParticleEffect.ParticlePacket.initialize();
+	@Override
+	public boolean isElevatorBlock(Block b) {
+		return b.getType().equals(Material.IRON_BLOCK);
+	}
+
+	@Override
+	public Optional<Block> isPartOfElevator(Block b) {
+		if(isElevatorBlock(b)) return Optional.of(b);
 		
-		getServer().getPluginManager().registerEvents(new IronelevatorEventListener(), this);
-		getServer().getPluginManager().registerEvents(new CornerElevatorEventListener(), this);
+		return Optional.empty();
 	}
-	
-	public void onDisable() {
-		ironelevator = null;
-	}
-	
+
 }
