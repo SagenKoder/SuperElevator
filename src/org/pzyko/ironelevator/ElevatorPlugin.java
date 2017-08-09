@@ -26,6 +26,7 @@ public class ElevatorPlugin extends JavaPlugin {
 		}
 
 		// Load languages
+		ResourceBundle.clearCache(); // Hopefully fix bugs with reloads
 		String[] locale = getConfig().getString("locale").split("_");
 		String language = locale[0];
 		String country = locale[1];
