@@ -42,7 +42,7 @@ public class ElevatorListener implements Listener {
 		p.teleport(l);
 		p.setVelocity(new Vector(0, 0, 0));
 		p.setFlying(false);
-		ActionHelper.sendActionMessage(p, "§aDu tok heisen NED");
+		ElevatorPlugin.INSTANCE.nmsHandler.sendActionMessage(p, "§aDu tok heisen NED");
 		ActionHelper.playoutElevatorEffect(p, currentElevator.get().elevator.getTeleportLocation(b), l);
 	}
 
@@ -77,7 +77,7 @@ public class ElevatorListener implements Listener {
 		p.teleport(l);
 		p.setVelocity(new Vector(0, 0, 0));
 		p.setFlying(false);
-		ActionHelper.sendActionMessage(p, "§aDu tok heisen OPP");
+		ElevatorPlugin.INSTANCE.nmsHandler.sendActionMessage(p, "§aDu tok heisen OPP");
 		ActionHelper.playoutElevatorEffect(p, currentElevator.get().elevator.getTeleportLocation(b), l);
 	}
 
@@ -105,7 +105,7 @@ public class ElevatorListener implements Listener {
 		}
 
 		lastElevator = elevatorBlock.get().block;
-		while(lastElevator != null) {
+		while(lastElevator != null) { // fuck GriefPrevention for not using Optional....
 			Optional<ElevatorBlock> ele = ElevatorUtils.getNextElevator(lastElevator, false);
 			if(ele.isPresent()) {
 				storiesFound.add(ele.get().block);
@@ -118,7 +118,7 @@ public class ElevatorListener implements Listener {
 		if(storiesFound.size() > 1) {
 			for(Block elevatorStory : storiesFound)
 				ActionHelper.playoutPlaceElevatorEffect(p, elevatorStory);
-			ActionHelper.sendActionMessage(p, "§aDu laget en heis med " + storiesFound.size() + " etasjer!");
+			ElevatorPlugin.INSTANCE.nmsHandler.sendActionMessage(p, "§aDu laget en heis med " + storiesFound.size() + " etasjer!");
 		}
 	}
 }
