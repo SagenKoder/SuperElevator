@@ -19,19 +19,19 @@ public class ElevatorPlugin extends JavaPlugin {
 	ResourceBundle messages = null;
 
 	public void onEnable() {
-		
+
 		// Load configuration
-	    if (!new File(getDataFolder(), "config.yml").exists()) {
-	         saveDefaultConfig();
-	    }
-		
+		if (!new File(getDataFolder(), "config.yml").exists()) {
+			saveDefaultConfig();
+		}
+
 		// Load languages
 		String[] locale = getConfig().getString("locale").split("_");
 		String language = locale[0];
 		String country = locale[1];
 		Locale currentLocale = new Locale(language, country);
 		messages = ResourceBundle.getBundle("org.pzyko.ironelevator.locales.locale", currentLocale);
-		
+
 		// Load NMS classes
 		String packageName = this.getServer().getClass().getPackage().getName();
 		String version = packageName.substring(packageName.lastIndexOf('.') + 1);
