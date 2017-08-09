@@ -1,0 +1,2 @@
+#The language to use, currently only nb_NO or en_US
+locale: nb_NO
