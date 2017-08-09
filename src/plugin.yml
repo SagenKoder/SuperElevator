@@ -1,6 +1,6 @@
-name: JernHeis
+name: SuperElevator
 version: 4.5
-description: Jernheis
+description: Easy to use elevators.
 author: l0lkj
 
 main: org.pzyko.ironelevator.ElevatorPlugin
