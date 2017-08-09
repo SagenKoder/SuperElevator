@@ -11,10 +11,11 @@ public class ElevatorUtils {
 	private static final int MIN_ELEVATION = 3;
 
 	public static Optional<ElevatorBlock> getNextElevator(Block b, boolean up) {
-		// UP
-		b = b.getRelative(up ? BlockFace.UP : BlockFace.DOWN, MIN_ELEVATION);
-		int i = MAX_ELEVATION;
+		b = b.getRelative(up ? BlockFace.UP : BlockFace.DOWN, MIN_ELEVATION); // skip first blocks
+		
 		Optional<ElevatorBlock> elevator = Optional.empty();
+		
+		int i = MAX_ELEVATION;
 		while ((i > 0) && !(elevator = getElevator(b)).isPresent()) {
 			i--;
 			b = b.getRelative(up ? BlockFace.UP : BlockFace.DOWN);

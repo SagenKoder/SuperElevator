@@ -22,6 +22,9 @@ public abstract class Elevator {
 
 		boolean safe = true;
 		
+		// fix for sign is solid bug
+		if(b.getRelative(BlockFace.DOWN).getType().equals(Material.WALL_SIGN)) safe = false;
+		
 		for(int i = 0; i <= 1; i++) {
 			Material m = b.getType();
 

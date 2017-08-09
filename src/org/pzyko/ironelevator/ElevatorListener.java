@@ -22,7 +22,7 @@ public class ElevatorListener implements Listener {
 		if(!p.hasPermission("pzyko.action.ironelevator")) return;
 		if(p.isSneaking()) return;
 		if(p.isFlying()) return;
-
+		
 		Optional<ElevatorBlock> currentElevator = ElevatorUtils.getElevator(b);
 		if(!currentElevator.isPresent()) return;
 		
@@ -35,7 +35,8 @@ public class ElevatorListener implements Listener {
 		Location l = elevator.getTeleportLocation(nextElevatorBlock);
 		l.setYaw(p.getLocation().getYaw());
 		l.setPitch(p.getLocation().getPitch());
-		
+
+		if(!ElevatorPlugin.INSTANCE.gph.playerCanAccessBlock(p, b)) return;
 		
 		p.teleport(l);
 		p.setVelocity(new Vector(0, 0, 0));
@@ -54,7 +55,8 @@ public class ElevatorListener implements Listener {
 		if(e.getFrom().getY() >= e.getTo().getY()) return;
 		
 		// Fix for halfblocks
-		if(e.getFrom().getY() - ((int)e.getFrom().getY()) < .5) return;
+		if((e.getFrom().getY() - ((int)e.getFrom().getY()) < .5) 
+				&& !p.getLocation().getBlock().getRelative(BlockFace.UP, 2).getType().isSolid()) return;
 
 		Optional<ElevatorBlock> currentElevator = ElevatorUtils.getElevator(b);
 		if(!currentElevator.isPresent()) return;
@@ -68,6 +70,8 @@ public class ElevatorListener implements Listener {
 		Location l = elevator.getTeleportLocation(nextElevatorBlock);
 		l.setYaw(p.getLocation().getYaw());
 		l.setPitch(p.getLocation().getPitch());
+		
+		if(!ElevatorPlugin.INSTANCE.gph.playerCanAccessBlock(p, b)) return;
 		
 		p.teleport(l);
 		p.setVelocity(new Vector(0, 0, 0));
