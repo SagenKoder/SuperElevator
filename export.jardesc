@@ -12,6 +12,7 @@
     </manifest>
     <selectedElements exportClassFiles="true" exportJavaFiles="true" exportOutputFolder="false">
         <javaElement handleIdentifier="=IronElevator/src"/>
+        <javaElement handleIdentifier="=IronElevator/resources"/>
         <file path="/IronElevator/.classpath"/>
         <file path="/IronElevator/.project"/>
     </selectedElements>
