@@ -6,10 +6,13 @@ import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
+import org.bukkit.metadata.MetadataValue;
 
 public class ActionHelper {
 
 	public static void playoutElevatorEffect(Player p, Location from, Location to) {
+		if(isVanished(p)) return;
+		
 		p.getWorld().playSound(from, Sound.ENTITY_IRONGOLEM_ATTACK, 1.0F, 0.0F);
 		p.getWorld().playSound(to, Sound.ENTITY_IRONGOLEM_ATTACK, 1.0F, 0.0F);
 
@@ -72,13 +75,15 @@ public class ActionHelper {
 	}
 
 	public static void playoutPlaceElevatorEffect(Player p, Block b) {
+		if(isVanished(p)) return;
+
 		Location l = b.getRelative(BlockFace.UP).getLocation();
 		l.add(.5, 0, .5);
-		
+
 		p.getWorld().playSound(l, Sound.BLOCK_END_PORTAL_FRAME_FILL, 1.0F, 0.0F);
-		
+
 		l.add(0, 0, 0);
-		
+
 		try {
 			for(Player o : Bukkit.getOnlinePlayers()) {
 
@@ -103,6 +108,14 @@ public class ActionHelper {
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
+	}
+
+
+	private static boolean isVanished(Player player) {
+		for (MetadataValue meta : player.getMetadata("vanished")) {
+			if (meta.asBoolean()) return true;
+		}
+		return false;
 	}
 
 }

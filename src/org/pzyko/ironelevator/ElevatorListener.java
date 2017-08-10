@@ -92,7 +92,7 @@ public class ElevatorListener implements Listener {
 
 		ArrayList<Block> storiesFound = new ArrayList<Block>();
 		storiesFound.add(elevatorBlock.get().block);
-		
+
 		Block lastElevator = elevatorBlock.get().block;
 		while(lastElevator != null) {
 			Optional<ElevatorBlock> ele = ElevatorUtils.getNextElevator(lastElevator, true);
