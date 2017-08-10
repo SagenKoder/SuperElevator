@@ -45,7 +45,7 @@ public class ElevatorPlugin extends JavaPlugin {
 		} catch (final Exception e) {
 			e.printStackTrace();
 			this.getLogger().severe(messages.getString("error_no_nms_version"));
-			this.getLogger().info(messages.getString("ask_dev_for_updates"));
+			this.getLogger().severe(messages.getString("ask_dev_for_updates"));
 			this.setEnabled(false);
 			return;
 		}
