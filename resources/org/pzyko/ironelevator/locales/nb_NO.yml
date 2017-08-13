@@ -1,0 +1,6 @@
+error_no_nms_version: "Fant ikke NMS support for denne versjonen av CraftBukkit/Minecraft!"
+ask_dev_for_updates: "Spør Utvikler om oppdatert versjon!"
+loading_supported_version: "Loader støtte for versjon %a"
+elevator_created: "&aDu laget en heis med %a etasjer!"
+elevator_up: "&aDu tok heisen OPP"
+elevator_down: "&aDu tok heisen NED"

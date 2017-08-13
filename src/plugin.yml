@@ -1,6 +1,6 @@
 name: SuperElevator
-version: 4.7
+version: 5.1
 description: Easy to use elevators.
 author: l0lkj
-
+softdepend: [GriefPrevention]
 main: org.pzyko.ironelevator.ElevatorPlugin

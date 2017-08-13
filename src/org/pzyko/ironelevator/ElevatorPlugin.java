@@ -1,13 +1,12 @@
 package org.pzyko.ironelevator;
 
 import java.io.File;
-import java.util.Locale;
-import java.util.ResourceBundle;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
 import org.pzyko.ironelevator.NMS.NMS;
 import org.pzyko.ironelevator.hooks.GriefPreventionHook;
+import org.pzyko.ironelevator.language.Messages;
 
 public class ElevatorPlugin extends JavaPlugin {
 
@@ -16,22 +15,20 @@ public class ElevatorPlugin extends JavaPlugin {
 	public GriefPreventionHook gph = new GriefPreventionHook();
 
 	NMS nmsHandler = null;
-	ResourceBundle messages = null;
 
 	public void onEnable() {
-
+		INSTANCE = this;
+		
 		// Load configuration
 		if (!new File(getDataFolder(), "config.yml").exists()) {
 			saveDefaultConfig();
 		}
+		if(!getConfig().isSet("enable_launchpads")) getConfig().set("enable_launchpads", true);
+		saveConfig();
 
 		// Load languages
-		ResourceBundle.clearCache(); // Hopefully fix bugs with reloads
-		String[] locale = getConfig().getString("locale").split("_");
-		String language = locale[0];
-		String country = locale[1];
-		Locale currentLocale = new Locale(language, country);
-		messages = ResourceBundle.getBundle("org.pzyko.ironelevator.locales.locale", currentLocale);
+		String locale = getConfig().getString("locale");
+		Messages.init(locale);
 
 		// Load NMS classes
 		String packageName = this.getServer().getClass().getPackage().getName();
@@ -44,16 +41,17 @@ public class ElevatorPlugin extends JavaPlugin {
 			}
 		} catch (final Exception e) {
 			e.printStackTrace();
-			this.getLogger().severe(messages.getString("error_no_nms_version"));
-			this.getLogger().severe(messages.getString("ask_dev_for_updates"));
+			this.getLogger().severe(Messages.getString("error_no_nms_version"));
+			this.getLogger().severe(Messages.getString("ask_dev_for_updates"));
 			this.setEnabled(false);
 			return;
 		}
-		this.getLogger().info(messages.getString("loading_supported_version").replace("%a", version));
+		this.getLogger().info(Messages.getString("loading_supported_version").replace("%a", version));
 
-		INSTANCE = this;
 		gph.isPluginEnabled();
 		getServer().getPluginManager().registerEvents(new ElevatorListener(), this);
+		
+		if(getConfig().getBoolean("enable_launchpads")) getServer().getPluginManager().registerEvents(new LaunchPadListener(), this);
 	}
 
 	public void onDisable() {

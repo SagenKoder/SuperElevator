@@ -14,6 +14,8 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.util.Vector;
 
+import org.pzyko.ironelevator.language.Messages;
+
 public class ElevatorListener implements Listener {
 
 	@EventHandler
@@ -42,7 +44,7 @@ public class ElevatorListener implements Listener {
 		p.teleport(l);
 		p.setVelocity(new Vector(0, 0, 0));
 		p.setFlying(false);
-		ElevatorPlugin.INSTANCE.nmsHandler.sendActionMessage(p, ElevatorPlugin.INSTANCE.messages.getString("elevator_down"));
+		ElevatorPlugin.INSTANCE.nmsHandler.sendActionMessage(p, Messages.getString("elevator_down"));
 		ActionHelper.playoutElevatorEffect(p, currentElevator.get().elevator.getTeleportLocation(b), l);
 	}
 
@@ -77,7 +79,7 @@ public class ElevatorListener implements Listener {
 		p.teleport(l);
 		p.setVelocity(new Vector(0, 0, 0));
 		p.setFlying(false);
-		ElevatorPlugin.INSTANCE.nmsHandler.sendActionMessage(p, ElevatorPlugin.INSTANCE.messages.getString("elevator_up"));
+		ElevatorPlugin.INSTANCE.nmsHandler.sendActionMessage(p, Messages.getString("elevator_up"));
 		ActionHelper.playoutElevatorEffect(p, currentElevator.get().elevator.getTeleportLocation(b), l);
 	}
 
