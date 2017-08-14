@@ -52,6 +52,8 @@ public class ElevatorPlugin extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new ElevatorListener(), this);
 		
 		if(getConfig().getBoolean("enable_launchpads")) getServer().getPluginManager().registerEvents(new LaunchPadListener(), this);
+		
+		getCommand("superelevator").setExecutor(new SuperElevatorCommand());
 	}
 
 	public void onDisable() {
