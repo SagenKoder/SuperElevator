@@ -40,7 +40,7 @@ public class LaunchPadListener implements Listener {
 
 		int speed = 5;
 
-		if (p.hasPermission("pzyko.action.launch") && plateBlock == top && bottomBlock == bottom) {
+		if (plateBlock == top && bottomBlock == bottom) {
 			p.setVelocity(p.getLocation().getDirection().multiply(speed));
 			p.setVelocity(new Vector(p.getVelocity().getX(), 1.0D, p.getVelocity().getZ()));
 			p.playSound(l, Sound.ENTITY_BAT_TAKEOFF, 1.0F, 1.0F);
