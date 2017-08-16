@@ -4,6 +4,7 @@ import java.io.File;
 
 import org.inventivetalent.update.spiget.SpigetUpdate;
 import org.inventivetalent.update.spiget.UpdateCallback;
+import org.inventivetalent.update.spiget.comparator.VersionComparator;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -53,8 +54,9 @@ public class ElevatorPlugin extends JavaPlugin {
 		this.getLogger().info(Messages.getString("loading_supported_version").replace("%a", version));
 
 		// Auto-update plugin
-
+		getLogger().info("Checking for updates...");
 		final SpigetUpdate updater = new SpigetUpdate(this, 45389);
+		updater.setVersionComparator(VersionComparator.SEM_VER);
 		updater.checkForUpdate(new UpdateCallback() {
 			@Override
 			public void updateAvailable(String newVersion, String downloadUrl, boolean hasDirectDownload) {
@@ -68,11 +70,12 @@ public class ElevatorPlugin extends JavaPlugin {
 							// Update failed
 							getLogger().warning("Update download failed, reason is " + updater.getFailReason());
 						}
-					}
+					} else {
+						getLogger().warning("New update found! Version " + newVersion + " is ready to download!");
+						getLogger().warning("Autoupdate is disabled in the config!");
+						getLogger().warning("Download new version from " + downloadUrl);
+					} 
 				} else {
-					getLogger().warning("New update found! Version " + newVersion + " is ready to download!");
-					getLogger().warning("Autoupdate is disabled in the config!");
-					getLogger().warning("Download new version from " + downloadUrl);
 				}
 			}
 			@Override
@@ -83,7 +86,6 @@ public class ElevatorPlugin extends JavaPlugin {
 
 		gph.isPluginEnabled();
 		getServer().getPluginManager().registerEvents(new ElevatorListener(), this);
-
 		if(getConfig().getBoolean("enable_launchpads")) getServer().getPluginManager().registerEvents(new LaunchPadListener(), this);
 
 		getCommand("superelevator").setExecutor(new SuperElevatorCommand());

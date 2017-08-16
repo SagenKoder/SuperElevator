@@ -91,12 +91,12 @@ public abstract class SpigetUpdateAbstract {
 					connection.setRequestProperty("User-Agent", getUserAgent());
 					JsonObject jsonObject = new JsonParser().parse(new InputStreamReader(connection.getInputStream())).getAsJsonObject();
 					latestResourceInfo = new Gson().fromJson(jsonObject, ResourceInfo.class);
-
+					
 					connection = (HttpURLConnection) new URL(String.format(RESOURCE_VERSION, resourceId, System.currentTimeMillis())).openConnection();
 					connection.setRequestProperty("User-Agent", getUserAgent());
 					jsonObject = new JsonParser().parse(new InputStreamReader(connection.getInputStream())).getAsJsonObject();
 					latestResourceInfo.latestVersion = new Gson().fromJson(jsonObject, ResourceVersion.class);
-
+					
 					if (isVersionNewer(currentVersion, latestResourceInfo.latestVersion.name)) {
 						callback.updateAvailable(latestResourceInfo.latestVersion.name, "https://spigotmc.org/" + latestResourceInfo.file.url, !latestResourceInfo.external);
 					} else {

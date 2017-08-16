@@ -1,6 +1,6 @@
 package org.pzyko.ironelevator;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.UUID;
 
 import org.bukkit.Effect;
@@ -14,11 +14,12 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 public class LaunchPadListener implements Listener {
 
-	ArrayList<UUID> launchedPlayers = new ArrayList<UUID>();
+	HashMap<UUID, Long> launchedPlayers = new HashMap<UUID, Long>();
 	
 	@EventHandler
 	public void onPlayerMove(PlayerMoveEvent event) {
@@ -28,9 +29,18 @@ public class LaunchPadListener implements Listener {
 		// remove from list if on ground
 		if(event.getFrom().getY() >= event.getTo().getY() 
 				&& p.getLocation().getBlock().getRelative(BlockFace.DOWN).getType().isSolid() 
-				&& launchedPlayers.contains(p.getUniqueId())) 
-			launchedPlayers.remove(p.getUniqueId());
-
+				&& launchedPlayers.containsKey(p.getUniqueId())
+				&& launchedPlayers.get(p.getUniqueId()) < System.currentTimeMillis() - 500) {
+			
+			new BukkitRunnable() {
+				@Override
+				public void run() {
+					launchedPlayers.remove(p.getUniqueId());
+				}
+			}.runTaskLater(ElevatorPlugin.INSTANCE, 1);
+			
+		}
+		
 		// launch
 		Material plateBlock = Material.IRON_PLATE;
 		Material bottomBlock = Material.REDSTONE_BLOCK;
@@ -46,7 +56,7 @@ public class LaunchPadListener implements Listener {
 			p.playSound(l, Sound.ENTITY_BAT_TAKEOFF, 1.0F, 1.0F);
 			l.getWorld().playEffect(l, Effect.ENDER_SIGNAL, 4);
 
-			launchedPlayers.add(p.getUniqueId());
+			launchedPlayers.put(p.getUniqueId(), System.currentTimeMillis());
 		}
 	}
 
@@ -54,7 +64,7 @@ public class LaunchPadListener implements Listener {
 	public void onPlayerDamage(EntityDamageEvent event) {
 		if (!(event.getEntity() instanceof Player)) return;
 		Player p = (Player) event.getEntity();
-		if (!launchedPlayers.contains(p.getUniqueId())) return;
+		if (!launchedPlayers.containsKey(p.getUniqueId())) return;
 		if(event.getCause().equals(DamageCause.FALL))
 		event.setCancelled(true);
 	}

@@ -1,5 +1,5 @@
 name: SuperElevator
-version: 5.4
+version: 5.5
 description: Easy to use elevators.
 author: l0lkj
 softdepend: [GriefPrevention]
