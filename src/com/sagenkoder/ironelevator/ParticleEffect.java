@@ -1,0 +1,68 @@
+package com.sagenkoder.ironelevator;
+
+import org.bukkit.Location;
+import org.bukkit.entity.Player;
+
+public enum ParticleEffect {
+	EXPLOSION_NORMAL("EXPLOSION_NORMAL"),
+	EXPLOSION_LARGE("EXPLOSION_LARGE"),
+	EXPLOSION_HUGE("EXPLOSION_HUGE"),
+	FIREWORKS_SPARK("FIREWORKS_SPARK"),
+	WATER_BUBBLE("WATER_BUBBLE"),
+	WATER_SPLASH("WATER_SPLASH"),
+	WATER_WAKE("WATER_WAKE"),
+	SUSPENDED("SUSPENDED"),
+	SUSPENDED_DEPTH("SUSPENDED_DEPTH"),
+	CRIT("CRIT"),
+	CRIT_MAGIC("CRIT_MAGIC"),
+	SMOKE_NORMAL("SMOKE_NORMAL"),
+	SMOKE_LARGE("SMOKE_LARGE"),
+	SPELL("SPELL"),
+	SPELL_INSTANT("SPELL_INSTANT"),
+	SPELL_MOB("SPELL_MOB"),
+	SPELL_MOB_AMBIENT("SPELL_MOB_AMBIENT"),
+	SPELL_WITCH("SPELL_WITCH"),
+	DRIP_WATER("DRIP_WATER"),
+	DRIP_LAVA("DRIP_LAVA"),
+	VILLAGER_ANGRY("VILLAGER_ANGRY"),
+	VILLAGER_HAPPY("VILLAGER_HAPPY"),
+	TOWN_AURA("TOWN_AURA"),
+	NOTE("NOTE"),
+	PORTAL("PORTAL"),
+	ENCHANTMENT_TABLE("ENCHANTMENT_TABLE"),
+	FLAME("FLAME"),
+	LAVA("LAVA"),
+	FOOTSTEP("FOOTSTEP"),
+	CLOUD("CLOUD"),
+	REDSTONE("REDSTONE"),
+	SNOWBALL("SNOWBALL"),
+	SNOW_SHOVEL("SNOW_SHOVEL"),
+	SLIME("SLIME"),
+	HEART("HEART"),
+	BARRIER("BARRIER"),
+	ITEM_CRACK("ITEM_CRACK"),
+	BLOCK_CRACK("BLOCK_CRACK"),
+	BLOCK_DUST("BLOCK_DUST"),
+	WATER_DROP("WATER_DROP"),
+	ITEM_TAKE("ITEM_TAKE"),
+	MOB_APPEARANCE("MOB_APPEARANCE"),
+	DRAGON_BREATH("DRAGON_BREATH"),
+	END_ROD("END_ROD"),
+	DAMAGE_INDICATOR("DAMAGE_INDICATOR"),
+	SWEEP_ATTACK("SWEEP_ATTACK"),
+	FALLING_DUST("FALLING_DUST"),
+	TOTEM("TOTEM"),
+	SPIT("SPIT");
+
+
+	private String particle;
+
+	ParticleEffect(String particle) {
+		this.particle = particle;
+	}
+
+	public void sendToPlayer(Player player, Location location, float offsetX, float offsetY, float offsetZ, float speed, int count) throws Exception {
+		ElevatorPlugin.INSTANCE.nmsHandler.sendParticleToPlayer(player, particle, location, offsetX, offsetY, offsetZ, speed, count);
+	}
+
+}
