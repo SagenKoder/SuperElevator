@@ -1,32 +1,31 @@
 package com.sagenkoder.ironelevator.language;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 import com.google.common.base.Joiner;
 import com.sagenkoder.ironelevator.ElevatorPlugin;
-import com.sagenkoder.ironelevator.utils.JarUtils;
-import com.sagenkoder.ironelevator.utils.MiscUtil;
 
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.Configuration;
-import org.bukkit.configuration.file.YamlConfiguration;
 
 public class Messages {
 
 	static Configuration fallbackMessages = null;
 	static Configuration messages = null;
 
-	public static void init(String locale) {
+	public static void init(String jarLocalePackage, String locale) {
 		File langDir = new File(ElevatorPlugin.INSTANCE.getDataFolder(), "language/");
 		if(!langDir.exists()) langDir.mkdir();
-		JarUtils ju = new JarUtils(ElevatorPlugin.INSTANCE);
+		JarExtractor ju = new JarExtractor(ElevatorPlugin.INSTANCE);
 
 		try {
-			for (String lang : MiscUtil.listFilesinJAR(ju.getJarFile(), "org/pzyko/ironelevator/locales", ".yml")) {
+			for (String lang : listFilesinJAR(ju.getJarFile(), jarLocalePackage.replace('.', File.pathSeparatorChar), ".yml")) {
 				ju.extractResource(lang, langDir);
 			}
 		} catch (IOException e) {
@@ -55,59 +54,8 @@ public class Messages {
 	}
 
 	private static Configuration loadMessageFile(String wantedLocale) throws Exception {
-		File langDir = new File(ElevatorPlugin.INSTANCE.getDataFolder(), "language/");
-		if(!langDir.exists()) langDir.mkdir();
-		File wanted = new File(langDir, wantedLocale + ".yml");
-		File located = locateMessageFile(wanted);
-		if (located == null) {
-			throw new Exception("Unknown locale '" + wantedLocale + "'");
-		}
-		YamlConfiguration conf;
-		try {
-			conf = MiscUtil.loadYamlUTF8(located);
-		} catch (Exception e) {
-			throw new Exception("Can't load message file [" + located + "]: " + e.getMessage());
-		}
-
-		// ensure that the config we're loading has all of the messages that the fallback has
-		// make a note of any missing translations
-		if (fallbackMessages != null && conf.getKeys(true).size() != fallbackMessages.getKeys(true).size()) {
-			Map<String,String> missingKeys = new HashMap<String, String>();
-			for (String key : fallbackMessages.getKeys(true)) {
-				if (!conf.contains(key) && !fallbackMessages.isConfigurationSection(key)) {
-					conf.set(key, fallbackMessages.get(key));
-					missingKeys.put(key, fallbackMessages.get(key).toString());
-				}
-			}
-			conf.set("NEEDS_TRANSLATION", missingKeys);
-			try {
-				conf.save(located);
-			} catch (IOException e) {
-				System.out.println("Error: Can't write " + located + ": " + e.getMessage());
-			}
-		}
-
-		return conf;
-	}
-
-	private static File locateMessageFile(File wanted) {
-		if (wanted == null) {
-			return null;
-		}
-		if (wanted.isFile() && wanted.canRead()) {
-			return wanted;
-		} else {
-			String basename = wanted.getName().replaceAll("\\.yml$", "");
-			if (basename.contains("_")) {
-				basename = basename.replaceAll("_.+$", "");
-			}
-			File actual = new File(wanted.getParent(), basename + ".yml");
-			if (actual.isFile() && actual.canRead()) {
-				return actual;
-			} else {
-				return null;
-			}
-		}
+		// TODO Use Configuration class to load
+		return null;
 	}
 
 	private static String getString(Configuration conf, String key) {
@@ -122,6 +70,22 @@ public class Messages {
 		}
 		return s;
 	}
+	
+    private static String[] listFilesinJAR(File jarFile, String path, String ext) throws IOException {
+        ZipInputStream zip = new ZipInputStream(new FileInputStream(jarFile));
+        ZipEntry ze;
+
+        List<String> list = new ArrayList<String>();
+        while ((ze = zip.getNextEntry()) != null ) {
+            String entryName = ze.getName();
+            if (entryName.startsWith(path) && ext != null && entryName.endsWith(ext)) {
+                list.add(entryName);
+            }
+        }
+        zip.close();
+
+        return list.toArray(new String[list.size()]);
+    }
 
 	public static String getString(String key) {
 		if (messages == null) {

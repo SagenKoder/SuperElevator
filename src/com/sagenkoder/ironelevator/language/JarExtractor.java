@@ -1,4 +1,4 @@
-package com.sagenkoder.ironelevator.utils;
+package com.sagenkoder.ironelevator.language;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -17,7 +17,7 @@ import java.nio.charset.Charset;
 
 import org.bukkit.plugin.Plugin;
 
-public class JarUtils {
+public class JarExtractor {
 	public enum ExtractWhen { ALWAYS, IF_NOT_EXISTS, IF_NEWER }
 
 	public static final Charset TARGET_ENCODING = Charset.forName("UTF-8");
@@ -25,7 +25,7 @@ public class JarUtils {
 
 	private final Plugin plugin;
 
-	public JarUtils(Plugin plugin) {
+	public JarExtractor(Plugin plugin) {
 		this.plugin = plugin;
 	}
 

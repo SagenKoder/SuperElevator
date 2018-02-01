@@ -33,7 +33,7 @@ public class ElevatorPlugin extends JavaPlugin {
 
 		// Load languages
 		String locale = getConfig().getString("locale");
-		Messages.init(locale);
+		Messages.init("com.sagenkoder.ironelevator.locales", locale);
 
 		// Load NMS classes
 		String packageName = this.getServer().getClass().getPackage().getName();
